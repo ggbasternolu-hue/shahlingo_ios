@@ -194,24 +194,22 @@ class FirebaseService {
           ? Map<String, dynamic>.from(root['waiting'] as Map)
           : <String, dynamic>{};
       final existing = waiting[uid];
-      if (existing is Map && existing['status'] == 'waiting') {
-        return Transaction.success(root);
-      }
       if (existing is Map && existing['status'] == 'matched') {
-        waiting.remove(uid);
+        return Transaction.success(root);
       }
 
       final now = DateTime.now().millisecondsSinceEpoch;
       String? opponentUid;
       String? opponentName;
       var opponentElo = 0;
-      for (final entry in waiting.entries) {
+      for (final entry in waiting.entries.toList()) {
         if (entry.key == uid || entry.value is! Map) continue;
         final candidate = Map<String, dynamic>.from(entry.value as Map);
         final joinedAt = candidate['joinedAt'];
-        if (candidate['status'] != 'waiting' ||
-            joinedAt is! num ||
+        if (candidate['status'] != 'waiting') continue;
+        if (joinedAt is! num ||
             now - joinedAt > const Duration(minutes: 2).inMilliseconds) {
+          waiting.remove(entry.key);
           continue;
         }
         opponentUid = entry.key;

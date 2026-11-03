@@ -108,7 +108,19 @@ class PlayerProgress extends ChangeNotifier {
 
   // ───────────────────────── games ─────────────────────────
 
-  Future<void> recordGame(GameRecord record, {required int gainedXp}) async {
+  Future<void> recordGame(
+    GameRecord record, {
+    required int gainedXp,
+    int? opponentElo,
+  }) async {
+    if (opponentElo != null) {
+      final score = switch (record.result) {
+        GameResult.win => 1.0,
+        GameResult.draw => 0.5,
+        GameResult.loss => 0.0,
+      };
+      _applyRating(score: score, opponentElo: opponentElo);
+    }
     history = [record, ...history].take(30).toList();
     xp += gainedXp;
     _touchStreak();
@@ -126,12 +138,7 @@ class PlayerProgress extends ChangeNotifier {
     return (32 * (score - expected)).round();
   }
 
-  void finishOnlineRound({
-    required bool? won,
-    required int opponentElo,
-    required GameRecord record,
-  }) {
-    final score = won == null ? 0.5 : (won ? 1.0 : 0.0);
+  void _applyRating({required double score, required int opponentElo}) {
     elo =
         (elo +
                 calculateEloChange(
@@ -142,6 +149,15 @@ class PlayerProgress extends ChangeNotifier {
             .clamp(0, 5000)
             .toInt();
     ratedGames++;
+  }
+
+  void finishOnlineRound({
+    required bool? won,
+    required int opponentElo,
+    required GameRecord record,
+  }) {
+    final score = won == null ? 0.5 : (won ? 1.0 : 0.0);
+    _applyRating(score: score, opponentElo: opponentElo);
     xp += won == true ? 20 : 8;
     history = [record, ...history].take(30).toList();
     _touchStreak();

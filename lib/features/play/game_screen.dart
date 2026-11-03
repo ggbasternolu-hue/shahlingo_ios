@@ -222,6 +222,7 @@ class _GameScreenState extends State<GameScreen> {
           playerWhite: true,
         ),
         gainedXp: _endXp,
+        opponentElo: _vsMaria ? 800 : null,
       ),
     );
     final lessonId = widget.lessonId;

@@ -57,4 +57,21 @@ void main() {
     expect(progress.ratedGames, 1);
     expect(progress.wins, 1);
   });
+
+  test('a win against Maria also awards Elo', () async {
+    final progress = PlayerProgress();
+    final record = GameRecord(
+      opponent: 'Мария',
+      result: GameResult.win,
+      moves: const [],
+      playedAtMs: 1,
+      playerWhite: true,
+    );
+
+    await progress.recordGame(record, gainedXp: 30, opponentElo: 800);
+
+    expect(progress.elo, 32);
+    expect(progress.ratedGames, 1);
+    expect(progress.wins, 1);
+  });
 }
