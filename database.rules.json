@@ -1,0 +1,27 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "leaderboard": {
+      ".read": "auth != null",
+      ".indexOn": ["elo"],
+      "$uid": {
+        ".write": "auth != null && auth.uid === $uid",
+        ".validate": "newData.hasChildren(['name', 'elo', 'xp', 'ratedGames', 'updatedAt']) && newData.child('name').isString() && newData.child('name').val().length <= 20 && newData.child('elo').isNumber() && newData.child('elo').val() >= 0 && newData.child('elo').val() <= 5000 && newData.child('xp').isNumber() && newData.child('xp').val() >= 0 && newData.child('ratedGames').isNumber() && newData.child('ratedGames').val() >= 0"
+      }
+    },
+    "matchmaking": {
+      "lobby": {
+        ".read": "auth != null",
+        ".write": "auth != null"
+      }
+    },
+    "matches": {
+      "$matchId": {
+        ".read": "auth != null && (data.child('whiteUid').val() === auth.uid || data.child('blackUid').val() === auth.uid || root.child('matchmaking/lobby/waiting').child(auth.uid).child('matchId').val() === $matchId)",
+        ".write": "auth != null && (data.child('whiteUid').val() === auth.uid || data.child('blackUid').val() === auth.uid || newData.child('whiteUid').val() === auth.uid || newData.child('blackUid').val() === auth.uid)",
+        ".validate": "newData.hasChildren(['whiteUid', 'blackUid', 'fen', 'status', 'createdAt', 'updatedAt'])"
+      }
+    }
+  }
+}

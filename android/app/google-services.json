@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "246943496514",
+    "firebase_url": "https://shahlingo-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "shahlingo",
+    "storage_bucket": "shahlingo.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:246943496514:android:3f209857265dad9826f0db",
+        "android_client_info": {
+          "package_name": "com.shahlingo.shahlingo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCn3gM5kZMp2V5tr1jN22hBJ39WdvG9rI0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
