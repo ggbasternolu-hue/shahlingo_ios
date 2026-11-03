@@ -144,6 +144,18 @@ class _GameScreenState extends State<GameScreen> {
         }
       }
     }
+    if (selectedMove == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            context.t(
+              'ИИ Марии не ответил; сделан случайный допустимый ход.',
+              'Maria’s AI did not respond; a random legal move was made.',
+            ),
+          ),
+        ),
+      );
+    }
     final move = selectedMove ?? legalMoves[_random.nextInt(legalMoves.length)];
     final from = move.fromAlgebraic;
     final to = move.toAlgebraic;
